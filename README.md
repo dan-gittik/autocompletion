@@ -7,19 +7,19 @@ commands are autocompleted.
 
 1. Download ``autocompleter.py``.
 
-   ```bash
+   ```shell
    $ wget https://raw.githubusercontent.com/dan-gittik/autocompleter/master/autocompleter.py -O ~/.autocompleter.py
    ```
 
 2. Source ``autocompleter.py`` (yeah, it's a Bash script as well!).
 
-   ```bash
+   ```shell
    $ source ~/.autocompleter.py
    ```
 
    You might want to add this to your ``.bashrc`` or ``.profile``:
 
-   ```bash
+   ```shell
    $ echo "source ~/.autocompleter.py" >> ~/.bashrc
    ```
    
@@ -27,7 +27,7 @@ commands are autocompleted.
 
 Once you've sourced ``autocompleter.py``, the ``autocomplete`` function should become available.
 
-```bash
+```shell
 $ autocomplete
 USAGE: autocomplete <command> <config-path>
 ```
@@ -35,7 +35,7 @@ USAGE: autocomplete <command> <config-path>
 Call it on the command you want autocompleted and the path to its autocompletion specifications file.
 For example:
 
-```bash
+```shell
 $ cat spec.py
 # one --foo --bar
 # two <path>
@@ -57,6 +57,7 @@ flags (e.g. ``--foo``) and/or arguments (e.g. ``<path>``).
 Flags are autocompleted once the user has typed ``-``, and can be boolean (e.g. ``--flag``) or have a value (e.g.
 ``--flag=<value>``). Boolean flags are autocompleted as-is, whereas flags with values are autocompleted until the
 ``=``, and then their value is autocompleted like an argument.
+
 Flags are only autocompleted once; that is, if ``--foo`` was already typed, it will not be offered for autocompletion
 again.
 
@@ -70,11 +71,12 @@ autocomplete) and a path, its autocompletion specification will be ``# decrypt <
 The cool thing about this framework is how easy it is to define completers of your own: all you have to do is implement
 a ``complete_something(arg, word)`` function, and it will be called to autocomplete ``<something>`` arguments (and flag
 values)!
+
 A completer function receives ``arg``, which is a complex object for advanced usage (covered later), and ``prefix``,
 which is whatever the user has typed so far; and returns a list of strings the are considered as autocompletion
 options. For example:
 
-```
+```python
 # subcommand <color>
 
 colors = 'red', 'yellow', 'green', 'blue'
@@ -85,7 +87,7 @@ def complete_color(arg, prefix):
 
 In fact, the framework filters options starting with the prefix on its own, so this can be made even shorter:
 
-```
+```python
 # subcommand <color>
 
 def complete_color(arg, prefix):
@@ -95,7 +97,7 @@ def complete_color(arg, prefix):
 However, the ``prefix`` comes in handy when we want to filter options ourselves for efficiency reasons, like when
 querying a database:
 
-```
+```python
 # subcommand <user>
 
 def complete_user(arg, prefix):
@@ -112,15 +114,17 @@ autocompletions that depend on the subcommand or other flags or arguments.
 In case of a flag value autocompletion, ``arg`` is a ``Flag`` object with a ``name`` (e.g. ``--foo``), a ``value``
 (e.g. ``<value>``), and a ``subcommand``. In case of an argument autocompletion, ``arg`` is an ``Argument`` object
 with a ``name`` (e.g. ``<path>``) and a ``subcommand``.
+
 In both cases, ``subcommand`` is a ``Subcommand`` object with a ``name`` (e.g. ``one``), a ``words`` list of all the
 flags and arguments it supports, and the same list split into a ``flags`` dictionary and an ``arguments`` list.
+
 Furthermore, it has an ``autocompleter`` attribute, which is an ``Autocompleter`` object with the ``line`` typed by
 the user, the ``cursor`` position in it, the same line split into a ``words`` list, and the ``index`` of the current
 word.
 
 So, for example, to get the previous word, one would do:
 
-```
+```python
 # subcommand <example>
 
 def complete_example(arg, prefix):
@@ -132,7 +136,7 @@ Notice that the previous word is not necessarily the previous argument, because 
 to get the previous argument, one would use ``subcommand``'s ``argument_index`` (available only when autocompleting
 arguments!):
 
-```
+```python
 # subcommand <arg1> <arg2>
 
 def complete_arg2(arg, prefix):
@@ -142,7 +146,7 @@ def complete_arg2(arg, prefix):
 
 To react differently to different subcommands, one would do:
 
-```
+```python
 # one <example>
 # two <example>
 
