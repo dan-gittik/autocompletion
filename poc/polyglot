@@ -1,0 +1,6 @@
+# This is polyglot script that works both in Bash and in Python (try running "bash polyglot" and "python polyglot").
+''':'
+echo 'bash'
+exit
+'''
+print('python')
