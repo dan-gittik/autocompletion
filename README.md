@@ -7,19 +7,19 @@ commands are autocompleted.
 
 1. Download ``autocompleter.py``.
 
-   ```shell
+   ```console
    $ wget https://raw.githubusercontent.com/dan-gittik/autocompleter/master/autocompleter.py -O ~/.autocompleter.py
    ```
 
 2. Source ``autocompleter.py`` (yeah, it's a Bash script as well!).
 
-   ```shell
+   ```console
    $ source ~/.autocompleter.py
    ```
 
    You might want to add this to your ``.bashrc`` or ``.profile``:
 
-   ```shell
+   ```console
    $ echo "source ~/.autocompleter.py" >> ~/.bashrc
    ```
    
@@ -27,7 +27,7 @@ commands are autocompleted.
 
 Once you've sourced ``autocompleter.py``, the ``autocomplete`` function should become available.
 
-```shell
+```console
 $ autocomplete
 USAGE: autocomplete <command> <config-path>
 ```
@@ -35,7 +35,7 @@ USAGE: autocomplete <command> <config-path>
 Call it on the command you want autocompleted and the path to its autocompletion specifications file.
 For example:
 
-```shell
+```console
 $ cat spec.py
 # one --foo --bar
 # two <path>
